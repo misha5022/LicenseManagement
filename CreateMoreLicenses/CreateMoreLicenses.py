@@ -3,7 +3,6 @@ import json
 import pandas as pd
 import random
 import string
-import time
 from tqdm import tqdm
 
 
@@ -13,8 +12,8 @@ UrlGetAllProducts = "http://iot.adani.by:4101/Product"
 UrlGetAllCompanies = "http://iot.adani.by:4101/Company"
 UrlGetAllDevices = "http://iot.adani.by:4000/Devices/GetAllMongo"
 AuthGetDevices = {'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMGY0NjRlYzk2MjExNTIxMTg1NzNkYyIsIm5iZiI6MTY0ODU0NzUzMiwiZXhwIjoxNjQ4NTY1NTMxLCJpYXQiOjE2NDg1NDc1MzJ9.tcpaAisMD3HTVKONEW4AP-Al_Kxz2jDcw2bo2hyfNok'}
-Auth = {'Content-type':'application/json', 'Accept':'application/json','Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFlNWQ0OTM2NGM0NGUzMGZlMzE4NyIsIm5iZiI6MTY0NzkzMTc4NiwiZXhwIjoxNjQ4NTM2NTg2LCJpYXQiOjE2NDc5MzE3ODZ9.l1wQ2iMmex-Vu1SD5RThGV0C_GOzXnMeMB3OkulxRDY'}
-AuthGet = {'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFlNWQ0OTM2NGM0NGUzMGZlMzE4NyIsIm5iZiI6MTY0Nzk0NjI1MSwiZXhwIjoxNjQ4NTUxMDUxLCJpYXQiOjE2NDc5NDYyNTF9.rjCwjxsp0SQdNFeJAy24t38aCS33QYiepLpnrlRbv-s'}
+Auth = {'Content-type':'application/json', 'Accept':'application/json','Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFlNWQ0OTM2NGM0NGUzMGZlMzE4NyIsIm5iZiI6MTY0ODU0NzQyMSwiZXhwIjoxNjQ5MTUyMjIxLCJpYXQiOjE2NDg1NDc0MjF9.r2jL3mX6YLAh27k2BdUJrLOE1O67efB5l9x-5eRFb2k'}
+AuthGet = {'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFlNWQ0OTM2NGM0NGUzMGZlMzE4NyIsIm5iZiI6MTY0ODU0NzQyMSwiZXhwIjoxNjQ5MTUyMjIxLCJpYXQiOjE2NDg1NDc0MjF9.r2jL3mX6YLAh27k2BdUJrLOE1O67efB5l9x-5eRFb2k'}
 
 
 def TableLoad (url,Auth):
@@ -26,9 +25,12 @@ def TableLoad (url,Auth):
         print ('The token "AuthGetDevices" has expired. Enter a new token authorization token "AuthGetDevices": ')
     else:
         column_names = devices_list[0].keys()
+        
+        #table = pd.DataFrame(columns = column_names)
         table = pd.DataFrame(columns = column_names)
         for r in tqdm(devices_list):
-            table = table.append(r, ignore_index=True)
+            df_dictionary = pd.DataFrame([r])
+            table = pd.concat([df_dictionary,table], ignore_index=True)
         print (" \nCreating Licenses...")
         return table
 
